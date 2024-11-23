@@ -1,4 +1,3 @@
-import tensorflow as tf
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -13,7 +12,7 @@ class HopfieldNetwork:
             self.weights += np.outer(pattern, pattern)
         # Ensure no self-connections (diagonal should be zero)
         np.fill_diagonal(self.weights, 0)
-        self.weights /= patterns.shape[0]
+        self.weights /= patterns.shape[1]
 
     def predict(self, input_pattern, steps=10):
         pattern = input_pattern.copy()
@@ -30,8 +29,9 @@ model_H = HopfieldNetwork(train.shape[1])
 model_H.train(train)
 model_H.weights = np.abs(model_H.weights)
 
-c = 5
-for one_count in range(int(np.prod(size) / 2) - 3, int(np.prod(size) / 2) + 3, 1):
+c = 3
+print(range(int(np.prod(size) / 2) - 1, int(np.prod(size) / 2) + 2, 1))
+for one_count in range(int(np.prod(size) / 2) - 1, int(np.prod(size) / 2) + 2, 1):
     el = -np.ones((np.prod(size), ))
     for i in range(one_count):
         el[i] = 1
@@ -41,7 +41,7 @@ for one_count in range(int(np.prod(size) / 2) - 3, int(np.prod(size) / 2) + 3, 1
         np.random.shuffle(el)
         axes[i, 0].imshow((el.reshape(size) + 1) / 2, cmap='viridis', vmin=0, vmax=1)
 
-        output = model_H.predict(el, steps=2)
+        output = model_H.predict(el, steps=1)
         axes[i, 1].imshow((output.reshape(size) + 1) / 2, cmap='viridis', vmin=0, vmax=1)
 
         axes[i, 0].set_title("input")
